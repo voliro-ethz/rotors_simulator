@@ -65,8 +65,8 @@ class LeePositionController {
   void SetTrajectoryPoint(
     const mav_msgs::EigenTrajectoryPoint& command_trajectory);
 
-  LeePositionControllerParameters controller_parameters_;
-  VehicleParameters vehicle_parameters_;
+  LeePositionControllerParameters controller_parameters_;  //definded below in this file
+  VehicleParameters vehicle_parameters_;  //incudesrotorconfiguration
 
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW
  private:

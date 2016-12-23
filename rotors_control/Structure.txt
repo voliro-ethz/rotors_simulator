@@ -1,0 +1,33 @@
+
+
+main()   //in LeePositionControllerNode
+{
+  //Initalization -------------------------------------------------
+  LeePositionControllerNode()     //constructor
+  {
+    //Define subscribers and publisher
+    InitializeParams()
+    {
+      overwrite default values with the ones from the yaml file
+      //uses GetRosParameter from parameters_ros.h
+      GetVehicleParameters()
+      {
+        //Load mass and Inertia from yaml file
+        //uses GetRosParameter from parameters_ros.h
+        GetRotorConfiguration
+          {
+            //Reads configuration from yaml file
+          }
+      }
+      lee_position_controller_.InitializeParameters()
+      {
+        //Initialize Allocation matrix and inertia vector
+      }
+    }
+  }
+  //CALL OF ODOMETRY --------------------------------------
+  
+
+
+
+}

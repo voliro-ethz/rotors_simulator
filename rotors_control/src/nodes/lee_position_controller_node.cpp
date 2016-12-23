@@ -52,6 +52,7 @@ LeePositionControllerNode::LeePositionControllerNode() {
 
 LeePositionControllerNode::~LeePositionControllerNode() { }
 
+//Load the parameters for the controller into the member lee position controller
 void LeePositionControllerNode::InitializeParams() {
   ros::NodeHandle pnh("~");
 
@@ -151,7 +152,7 @@ void LeePositionControllerNode::MultiDofJointTrajectoryCallback(
     command_timer_.start();
   }
 }
-
+//nicht interessant für uns
 void LeePositionControllerNode::TimedCommandCallback(const ros::TimerEvent& e) {
 
   if(commands_.empty()){
@@ -170,20 +171,22 @@ void LeePositionControllerNode::TimedCommandCallback(const ros::TimerEvent& e) {
   }
 }
 
+// Heres is the action happening. This is the important callback function ------------------------------------
 void LeePositionControllerNode::OdometryCallback(const nav_msgs::OdometryConstPtr& odometry_msg) {
 
   ROS_INFO_ONCE("LeePositionController got first odometry message.");
 
   EigenOdometry odometry;
   eigenOdometryFromMsg(odometry_msg, &odometry);
-  lee_position_controller_.SetOdometry(odometry);
+  lee_position_controller_.SetOdometry(odometry);  // Load the actual odometry in the member of lee_position_controller_
 
   Eigen::VectorXd ref_rotor_velocities;
-  lee_position_controller_.CalculateRotorVelocities(&ref_rotor_velocities);
+  lee_position_controller_.CalculateRotorVelocities(&ref_rotor_velocities); //Do the control and allocation and give rotorvelocities
 
   // Todo(ffurrer): Do this in the conversions header.
   mav_msgs::ActuatorsPtr actuator_msg(new mav_msgs::Actuators);
 
+  //Add here also the angles for the actuators in the same actuator msg
   actuator_msg->angular_velocities.clear();
   for (int i = 0; i < ref_rotor_velocities.size(); i++)
     actuator_msg->angular_velocities.push_back(ref_rotor_velocities[i]);
