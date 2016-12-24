@@ -26,8 +26,28 @@ main()   //in LeePositionControllerNode
     }
   }
   //CALL OF ODOMETRY --------------------------------------
-  
-
-
-
+   LeePositionControllerNode::OdometryCallback() //Listen to OdometryConstPtr& odometry_msg in ODOMETRY
+   {
+      lee_position_controller_.SetOdometry()
+      CalculateRotorVelocities(&ref_rotor_velocities)
+      {
+          //HERE COMES OUR CONTROLLER
+          ComputeDesiredAcceleration
+          ComputeDesiredAngularAcc
+          //modifies the rotor_velocities
+      }
+      //creates angular velocity and publish it
+      motor_velocity_reference_pub_.publish(actuator_msg) //we could implement angels directly in he actuator_msg
+   }
+   //CALL OF COMMANDPOSE
+   LeePositionControllerNode::CommandPoseCallback()
+   {
+      lee_position_controller_.SetTrajectoryPoint()
+   }
+   //CALL OF MultiDofJointTrajectory
+   LeePositionControllerNode::MultiDofJointTrajectoryCallback()
+   {
+      //some intelligent calculation for trajectories
+      lee_position_controller_.SetTrajectoryPoint()
+   }
 }

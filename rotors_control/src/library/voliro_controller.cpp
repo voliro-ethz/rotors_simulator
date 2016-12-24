@@ -18,19 +18,19 @@
  * limitations under the License.
  */
 
-#include "rotors_control/lee_position_controller.h"
+#include "rotors_control/voliro_controller.h"
 
 namespace rotors_control {
 
-LeePositionController::LeePositionController()
+VoliroController::VoliroController()
     : initialized_params_(false),
       controller_active_(false) {
   InitializeParameters();
 }
 
-LeePositionController::~LeePositionController() {}
+VoliroController::~VoliroController() {}
 
-void LeePositionController::InitializeParameters() {
+void VoliroController::InitializeParameters() {
   calculateAllocationMatrix(vehicle_parameters_.rotor_configuration_, &(controller_parameters_.allocation_matrix_));
   // To make the tuning independent of the inertia matrix we divide here.
   normalized_attitude_gain_ = controller_parameters_.attitude_gain_.transpose()
@@ -52,7 +52,7 @@ void LeePositionController::InitializeParameters() {
   initialized_params_ = true;
 }
 
-void LeePositionController::CalculateRotorVelocities(Eigen::VectorXd* rotor_velocities) const {
+void VoliroController::CalculateRotorVelocities(Eigen::VectorXd* rotor_velocities) const {
   assert(rotor_velocities);
   assert(initialized_params_);
 
@@ -77,21 +77,21 @@ void LeePositionController::CalculateRotorVelocities(Eigen::VectorXd* rotor_velo
   angular_acceleration_thrust(3) = thrust;
 
   *rotor_velocities = angular_acc_to_rotor_velocities_ * angular_acceleration_thrust;
-  *rotor_velocities = rotor_velocities->cwiseMax(Eigen::VectorXd::Zero(rotor_velocities->rows())); //put maximum value equal to zero
+  *rotor_velocities = rotor_velocities->cwiseMax(Eigen::VectorXd::Zero(rotor_velocities->rows()));
   *rotor_velocities = rotor_velocities->cwiseSqrt();
 }
 
-void LeePositionController::SetOdometry(const EigenOdometry& odometry) {
+void VoliroController::SetOdometry(const EigenOdometry& odometry) {
   odometry_ = odometry;
 }
 
-void LeePositionController::SetTrajectoryPoint(
+void VoliroController::SetTrajectoryPoint(
     const mav_msgs::EigenTrajectoryPoint& command_trajectory) {
   command_trajectory_ = command_trajectory;
   controller_active_ = true;
 }
 
-void LeePositionController::ComputeDesiredAcceleration(Eigen::Vector3d* acceleration) const {
+void VoliroController::ComputeDesiredAcceleration(Eigen::Vector3d* acceleration) const {
   assert(acceleration);
 
   Eigen::Vector3d position_error;
@@ -112,7 +112,7 @@ void LeePositionController::ComputeDesiredAcceleration(Eigen::Vector3d* accelera
 
 // Implementation from the T. Lee et al. paper
 // Control of complex maneuvers for a quadrotor UAV using geometric methods on SE(3)
-void LeePositionController::ComputeDesiredAngularAcc(const Eigen::Vector3d& acceleration,
+void VoliroController::ComputeDesiredAngularAcc(const Eigen::Vector3d& acceleration,
                                                      Eigen::Vector3d* angular_acceleration) const {
   assert(angular_acceleration);
 
