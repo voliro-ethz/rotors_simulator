@@ -57,42 +57,114 @@ void VoliroControllerNode::InitializeParams() {
   ros::NodeHandle pnh("~");
 
   // Read parameters from rosparam.
-  GetRosParameter(pnh, "position_gain/x",
-                  voliro_controller_.controller_parameters_.position_gain_.x(),
-                  &voliro_controller_.controller_parameters_.position_gain_.x());
-  GetRosParameter(pnh, "position_gain/y",
-                  voliro_controller_.controller_parameters_.position_gain_.y(),
-                  &voliro_controller_.controller_parameters_.position_gain_.y());
-  GetRosParameter(pnh, "position_gain/z",
-                  voliro_controller_.controller_parameters_.position_gain_.z(),
-                  &voliro_controller_.controller_parameters_.position_gain_.z());
-  GetRosParameter(pnh, "velocity_gain/x",
-                  voliro_controller_.controller_parameters_.velocity_gain_.x(),
-                  &voliro_controller_.controller_parameters_.velocity_gain_.x());
-  GetRosParameter(pnh, "velocity_gain/y",
-                  voliro_controller_.controller_parameters_.velocity_gain_.y(),
-                  &voliro_controller_.controller_parameters_.velocity_gain_.y());
-  GetRosParameter(pnh, "velocity_gain/z",
-                  voliro_controller_.controller_parameters_.velocity_gain_.z(),
-                  &voliro_controller_.controller_parameters_.velocity_gain_.z());
-  GetRosParameter(pnh, "attitude_gain/x",
-                  voliro_controller_.controller_parameters_.attitude_gain_.x(),
-                  &voliro_controller_.controller_parameters_.attitude_gain_.x());
-  GetRosParameter(pnh, "attitude_gain/y",
-                  voliro_controller_.controller_parameters_.attitude_gain_.y(),
-                  &voliro_controller_.controller_parameters_.attitude_gain_.y());
-  GetRosParameter(pnh, "attitude_gain/z",
-                  voliro_controller_.controller_parameters_.attitude_gain_.z(),
-                  &voliro_controller_.controller_parameters_.attitude_gain_.z());
-  GetRosParameter(pnh, "angular_rate_gain/x",
-                  voliro_controller_.controller_parameters_.angular_rate_gain_.x(),
-                  &voliro_controller_.controller_parameters_.angular_rate_gain_.x());
-  GetRosParameter(pnh, "angular_rate_gain/y",
-                  voliro_controller_.controller_parameters_.angular_rate_gain_.y(),
-                  &voliro_controller_.controller_parameters_.angular_rate_gain_.y());
-  GetRosParameter(pnh, "angular_rate_gain/z",
-                  voliro_controller_.controller_parameters_.angular_rate_gain_.z(),
-                  &voliro_controller_.controller_parameters_.angular_rate_gain_.z());
+  GetRosParameter(pnh, "position_kp/x",
+                  voliro_controller_.controller_parameters_.position_kp_.x(),
+                  &voliro_controller_.controller_parameters_.position_kp_.x());
+  GetRosParameter(pnh, "position_kp/y",
+                  voliro_controller_.controller_parameters_.position_kp_.y(),
+                  &voliro_controller_.controller_parameters_.position_kp_.y());
+  GetRosParameter(pnh, "position_kp/z",
+                  voliro_controller_.controller_parameters_.position_kp_.z(),
+                  &voliro_controller_.controller_parameters_.position_kp_.z());
+  GetRosParameter(pnh, "velocity_kp/x",
+                  voliro_controller_.controller_parameters_.velocity_kp_.x(),
+                  &voliro_controller_.controller_parameters_.velocity_kp_.x());
+  GetRosParameter(pnh, "velocity_kp/y",
+                  voliro_controller_.controller_parameters_.velocity_kp_.y(),
+                  &voliro_controller_.controller_parameters_.velocity_kp_.y());
+  GetRosParameter(pnh, "velocity_kp/z",
+                  voliro_controller_.controller_parameters_.velocity_kp_.z(),
+                  &voliro_controller_.controller_parameters_.velocity_kp_.z());
+  GetRosParameter(pnh, "attitude_kp/x",
+                  voliro_controller_.controller_parameters_.attitude_kp_.x(),
+                  &voliro_controller_.controller_parameters_.attitude_kp_.x());
+  GetRosParameter(pnh, "attitude_kp/y",
+                  voliro_controller_.controller_parameters_.attitude_kp_.y(),
+                  &voliro_controller_.controller_parameters_.attitude_kp_.y());
+  GetRosParameter(pnh, "attitude_kp/z",
+                  voliro_controller_.controller_parameters_.attitude_kp_.z(),
+                  &voliro_controller_.controller_parameters_.attitude_kp_.z());
+  GetRosParameter(pnh, "angular_rate_kp/x",
+                  voliro_controller_.controller_parameters_.angular_rate_kp_.x(),
+                  &voliro_controller_.controller_parameters_.angular_rate_kp_.x());
+  GetRosParameter(pnh, "angular_rate_kp/y",
+                  voliro_controller_.controller_parameters_.angular_rate_kp_.y(),
+                  &voliro_controller_.controller_parameters_.angular_rate_kp_.y());
+  GetRosParameter(pnh, "angular_rate_kp/z",
+                  voliro_controller_.controller_parameters_.angular_rate_kp_.z(),
+                  &voliro_controller_.controller_parameters_.angular_rate_kp_.z());
+  GetRosParameter(pnh, "position_ki/x",
+                  voliro_controller_.controller_parameters_.position_ki_.x(),
+                  &voliro_controller_.controller_parameters_.position_ki_.x());
+  GetRosParameter(pnh, "position_ki/y",
+                  voliro_controller_.controller_parameters_.position_ki_.y(),
+                  &voliro_controller_.controller_parameters_.position_ki_.y());
+  GetRosParameter(pnh, "position_ki/z",
+                  voliro_controller_.controller_parameters_.position_ki_.z(),
+                  &voliro_controller_.controller_parameters_.position_ki_.z());
+  GetRosParameter(pnh, "velocity_ki/x",
+                  voliro_controller_.controller_parameters_.velocity_ki_.x(),
+                  &voliro_controller_.controller_parameters_.velocity_ki_.x());
+  GetRosParameter(pnh, "velocity_ki/y",
+                  voliro_controller_.controller_parameters_.velocity_ki_.y(),
+                  &voliro_controller_.controller_parameters_.velocity_ki_.y());
+  GetRosParameter(pnh, "velocity_ki/z",
+                  voliro_controller_.controller_parameters_.velocity_ki_.z(),
+                  &voliro_controller_.controller_parameters_.velocity_ki_.z());
+  GetRosParameter(pnh, "attitude_ki/x",
+                  voliro_controller_.controller_parameters_.attitude_ki_.x(),
+                  &voliro_controller_.controller_parameters_.attitude_ki_.x());
+  GetRosParameter(pnh, "attitude_ki/y",
+                  voliro_controller_.controller_parameters_.attitude_ki_.y(),
+                  &voliro_controller_.controller_parameters_.attitude_ki_.y());
+  GetRosParameter(pnh, "attitude_ki/z",
+                  voliro_controller_.controller_parameters_.attitude_ki_.z(),
+                  &voliro_controller_.controller_parameters_.attitude_ki_.z());
+  GetRosParameter(pnh, "angular_rate_ki/x",
+                  voliro_controller_.controller_parameters_.angular_rate_ki_.x(),
+                  &voliro_controller_.controller_parameters_.angular_rate_ki_.x());
+  GetRosParameter(pnh, "angular_rate_ki/y",
+                  voliro_controller_.controller_parameters_.angular_rate_ki_.y(),
+                  &voliro_controller_.controller_parameters_.angular_rate_ki_.y());
+  GetRosParameter(pnh, "angular_rate_ki/z",
+                  voliro_controller_.controller_parameters_.angular_rate_ki_.z(),
+                  &voliro_controller_.controller_parameters_.angular_rate_ki_.z());
+  GetRosParameter(pnh, "position_kd/x",
+                  voliro_controller_.controller_parameters_.position_kd_.x(),
+                  &voliro_controller_.controller_parameters_.position_kd_.x());
+  GetRosParameter(pnh, "position_kd/y",
+                  voliro_controller_.controller_parameters_.position_kd_.y(),
+                  &voliro_controller_.controller_parameters_.position_kd_.y());
+  GetRosParameter(pnh, "position_kd/z",
+                  voliro_controller_.controller_parameters_.position_kd_.z(),
+                  &voliro_controller_.controller_parameters_.position_kd_.z());
+  GetRosParameter(pnh, "velocity_kd/x",
+                  voliro_controller_.controller_parameters_.velocity_kd_.x(),
+                  &voliro_controller_.controller_parameters_.velocity_kd_.x());
+  GetRosParameter(pnh, "velocity_kd/y",
+                  voliro_controller_.controller_parameters_.velocity_kd_.y(),
+                  &voliro_controller_.controller_parameters_.velocity_kd_.y());
+  GetRosParameter(pnh, "velocity_kd/z",
+                  voliro_controller_.controller_parameters_.velocity_kd_.z(),
+                  &voliro_controller_.controller_parameters_.velocity_kd_.z());
+  GetRosParameter(pnh, "attitude_kd/x",
+                  voliro_controller_.controller_parameters_.attitude_kd_.x(),
+                  &voliro_controller_.controller_parameters_.attitude_kd_.x());
+  GetRosParameter(pnh, "attitude_kd/y",
+                  voliro_controller_.controller_parameters_.attitude_kd_.y(),
+                  &voliro_controller_.controller_parameters_.attitude_kd_.y());
+  GetRosParameter(pnh, "attitude_kd/z",
+                  voliro_controller_.controller_parameters_.attitude_kd_.z(),
+                  &voliro_controller_.controller_parameters_.attitude_kd_.z());
+  GetRosParameter(pnh, "angular_rate_kd/x",
+                  voliro_controller_.controller_parameters_.angular_rate_kd_.x(),
+                  &voliro_controller_.controller_parameters_.angular_rate_kd_.x());
+  GetRosParameter(pnh, "angular_rate_kd/y",
+                  voliro_controller_.controller_parameters_.angular_rate_kd_.y(),
+                  &voliro_controller_.controller_parameters_.angular_rate_kd_.y());
+  GetRosParameter(pnh, "angular_rate_kd/z",
+                  voliro_controller_.controller_parameters_.angular_rate_kd_.z(),
+                  &voliro_controller_.controller_parameters_.angular_rate_kd_.z());
   GetVehicleParameters(pnh, &voliro_controller_.vehicle_parameters_);
   voliro_controller_.InitializeParameters();
 }

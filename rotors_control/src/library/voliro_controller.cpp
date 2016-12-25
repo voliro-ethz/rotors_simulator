@@ -33,10 +33,10 @@ VoliroController::~VoliroController() {}
 void VoliroController::InitializeParameters() {
   calculateAllocationMatrix(vehicle_parameters_.rotor_configuration_, &(controller_parameters_.allocation_matrix_));
   // To make the tuning independent of the inertia matrix we divide here.
-  normalized_attitude_gain_ = controller_parameters_.attitude_gain_.transpose()
+  normalized_attitude_gain_ = controller_parameters_.attitude_kp_.transpose()
       * vehicle_parameters_.inertia_.inverse();
   // To make the tuning independent of the inertia matrix we divide here.
-  normalized_angular_rate_gain_ = controller_parameters_.angular_rate_gain_.transpose()
+  normalized_angular_rate_gain_ = controller_parameters_.angular_rate_kp_.transpose()
       * vehicle_parameters_.inertia_.inverse();
 
   Eigen::Matrix4d I;
@@ -105,8 +105,8 @@ void VoliroController::ComputeDesiredAcceleration(Eigen::Vector3d* acceleration)
 
   Eigen::Vector3d e_3(Eigen::Vector3d::UnitZ());
 
-  *acceleration = (position_error.cwiseProduct(controller_parameters_.position_gain_)
-      + velocity_error.cwiseProduct(controller_parameters_.velocity_gain_)) / vehicle_parameters_.mass_
+  *acceleration = (position_error.cwiseProduct(controller_parameters_.position_kp_)
+      + velocity_error.cwiseProduct(controller_parameters_.velocity_kp_)) / vehicle_parameters_.mass_
       - vehicle_parameters_.gravity_ * e_3 - command_trajectory_.acceleration_W;
 }
 

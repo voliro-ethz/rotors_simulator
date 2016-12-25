@@ -1,5 +1,16 @@
 # Voliro controller parameters
-position_gain: {x: 6, y: 6, z: 6}
-velocity_gain: {x: 4.7, y: 4.7, z: 4.7}
-attitude_gain: {x: 3, y: 3, z: 0.15}
-angular_rate_gain: {x: 0.52, y: 0.52, z: 0.18}
+# Proportional part of the controller
+position_kp: {x: 6, y: 6, z: 6}
+velocity_kp: {x: 4.7, y: 4.7, z: 4.7}
+attitude_kp: {x: 3, y: 3, z: 0.15}
+angular_rate_kp: {x: 0.52, y: 0.52, z: 0.18}
+# Integration part of the controller
+position_ki : {x: 0, y: 0, z: 0}
+velocity_ki: {x: 0, y: 0, z: 0}
+attitude_ki: {x: 0, y: 0, z: 0}
+angular_rate_ki: {x: 0, y: 0, z: 0}
+# dervivative part of the controller
+position_kd: {x: 0, y: 0, z: 0}
+velocity_kd: {x: 0, y: 0, z: 0}
+attitude_kd: {x: 0, y: 0, z: 0}
+angular_rate_kd: {x: 0, y: 0, z: 0}
