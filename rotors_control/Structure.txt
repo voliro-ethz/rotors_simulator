@@ -22,6 +22,7 @@ main()   //in LeePositionControllerNode
       lee_position_controller_.InitializeParameters()
       {
         //Initialize Allocation matrix and inertia vector
+        //CHANGE:Load all alphas from look up table file into controller
       }
     }
   }
@@ -37,7 +38,8 @@ main()   //in LeePositionControllerNode
           //modifies the rotor_velocities
       }
       //creates angular velocity and publish it
-      motor_velocity_reference_pub_.publish(actuator_msg) //we could implement angels directly in he actuator_msg
+      motor_velocity_reference_pub_.publish(actuator_msg)
+      //CHANGE: we could implement angels directly in he actuator_msg
    }
    //CALL OF COMMANDPOSE
    LeePositionControllerNode::CommandPoseCallback()
@@ -49,5 +51,10 @@ main()   //in LeePositionControllerNode
    {
       //some intelligent calculation for trajectories
       lee_position_controller_.SetTrajectoryPoint()
+   }
+   //CHANGE:: CALLBACKFUNCTION FOR PUBLISHED angles
+   LeePositionControllerNode::AngleCallback()
+   {
+      lee_position_controller_.SetAngle() //controller needs member angel Eigen
    }
 }
