@@ -1,0 +1,3 @@
+mockingbird_base.xacro calls "controller_plugin_macro" from  //in rotors_description
+    component_snippet.xacro  include "controller_interface"   //also in rotor_description
+    // it passes names of topics
