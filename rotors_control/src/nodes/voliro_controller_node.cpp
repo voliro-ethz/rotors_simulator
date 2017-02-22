@@ -44,7 +44,7 @@ VoliroControllerNode::VoliroControllerNode() {
                                &VoliroControllerNode::OdometryCallback, this);
 
   motor_velocity_reference_pub_ = nh.advertise<mav_msgs::Actuators>(
-      mav_msgs::default_topics::COMMAND_ACTUATORS, 1);
+      mav_msgs::default_topics::COMMAND_ACTUATORS, 1); 
 
   command_timer_ = nh.createTimer(ros::Duration(0), &VoliroControllerNode::TimedCommandCallback, this,
                                   true, false);

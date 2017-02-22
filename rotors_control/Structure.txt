@@ -38,7 +38,7 @@ main()   //in LeePositionControllerNode
           //modifies the rotor_velocities
       }
       //creates angular velocity and publish it
-      motor_velocity_reference_pub_.publish(actuator_msg)
+      motor_velocity_reference_pub_.publish(actuator_msg)    //publishes on /ns/command/motor_speed
       //CHANGE: we could implement angels directly in he actuator_msg
    }
    //CALL OF COMMANDPOSE

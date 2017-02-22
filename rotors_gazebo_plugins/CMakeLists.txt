@@ -50,6 +50,8 @@ find_package(Eigen REQUIRED)
 find_package(octomap REQUIRED)
 find_package(gazebo REQUIRED)
 find_package(OpenCV REQUIRED)
+
+
 link_directories(${GAZEBO_LIBRARY_DIRS})
 include_directories(${GAZEBO_INCLUDE_DIRS})
 include_directories(${OpenCV_INCLUDE_DIRS})
@@ -108,6 +110,8 @@ add_library(rotors_gazebo_magnetometer_plugin src/gazebo_magnetometer_plugin.cpp
 target_link_libraries(rotors_gazebo_magnetometer_plugin ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES})
 add_dependencies(rotors_gazebo_magnetometer_plugin ${catkin_EXPORTED_TARGETS})
 
+
+
 if (BUILD_MAVLINK_INTERFACE)
   add_library(rotors_gazebo_mavlink_interface src/gazebo_mavlink_interface.cpp)
   target_link_libraries(rotors_gazebo_mavlink_interface ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES} ${mavros_LIBRARIES})
@@ -139,4 +143,3 @@ if (BUILD_MAVLINK_INTERFACE)
     LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   )
 endif()
-

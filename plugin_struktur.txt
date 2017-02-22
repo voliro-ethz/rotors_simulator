@@ -1,3 +1,8 @@
 mockingbird_base.xacro calls "controller_plugin_macro" from  //in rotors_description
     component_snippet.xacro  include "controller_interface"   //also in rotor_description
     // it passes names of topics
+
+    gazebo_controller_interface //takes published angular_velocities_reference and
+                                //but into an new message, which could be accessed
+                                //with a pointer and publish this message
+                                

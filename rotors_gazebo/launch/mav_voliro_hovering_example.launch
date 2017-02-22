@@ -6,6 +6,7 @@
   <arg name="log_file" default="$(arg mav_name)" />
   <arg name="paused" value="true"/>
 
+
   <env name="GAZEBO_MODEL_PATH" value="$(find rotors_gazebo)/models"/>
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
     <arg name="world_name" value="$(find rotors_gazebo)/worlds/$(arg world_name).world" />
@@ -28,7 +29,11 @@
       <remap from="odometry" to="odometry_sensor1/odometry" />
     </node>
     <node name="hovering_example" pkg="rotors_gazebo" type="hovering_example" output="screen"/>
-    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher">
+      <!-- <remap from="robot_description" to="mockingbird/robot_description"/> -->
+    </node>
     <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
   </group>
+
+  <include file="$(find rotors_control)/launch/mockingbird_control.launch" />
 </launch>
