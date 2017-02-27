@@ -35,11 +35,12 @@
     <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
 
     <rosparam file="$(find rotors_control)/config/servo_motor_control.yaml" command="load"/>
-
+    <group ns="$(arg mav_name)">
     <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
-      output="screen" ns="/mockingbird" args="joint_0_position_controller joint_state_controller">
+      output="screen" ns="/mockingbird/mockingbird" args="joint_0_position_controller joint_state_controller">
       <remap from="robot_description" to= "$(arg mav_name)/robot_description"/>
     </node>
+      </group>
   </group>
 
   <!-- <include file="$(find rotors_control)/launch/mockingbird_control.launch" /> -->
