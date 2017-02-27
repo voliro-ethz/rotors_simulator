@@ -38,7 +38,7 @@
 
     <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
       output="screen" ns="/mockingbird" args="joint_0_position_controller joint_state_controller">
-      <!-- <remap from="robot_description" to= "$(arg mav_name)/robot_description"/> -->
+      <remap from="robot_description" to= "$(arg mav_name)/robot_description"/>
     </node>
   </group>
 
