@@ -146,7 +146,7 @@
   <!-- Tilting rotorunit link and joint -->
   <xacro:macro name="rotor_unit"
     params="robot_namespace suffix mass_rotor_unit parent motor_number lower_limit upper_limit effort velocity mesh_rotor_unit *origin *inertia">
-    <joint name="${robot_namespace}/rotor_unit_${motor_number}_joint" type="revolute">
+    <joint name="${robot_namespace}/rotor_unit_${motor_number}_revolutejoint" type="revolute">
       <xacro:insert_block name="origin" />
       <axis xyz="1 0 0" />
        <limit lower="${lower_limit}" upper="${upper_limit}" effort="${effort}" velocity="${velocity}" />
@@ -155,16 +155,6 @@
       <parent link="${parent}" />
       <child link="${robot_namespace}/rotor_unit_${motor_number}" />
     </joint>
-    <transmission name="${robot_namespace}/rotor_unit_${motor_number}_trans">
-      <type>transmission_interface/SimpleTransmission</type>
-        <joint name="${robot_namespace}/rotor_unit_${motor_number}_joint">
-          <hardwareInterface>EffortJointInterface</hardwareInterface>
-        </joint>
-        <actuator name="${robot_namespace}/rotor_unit_${motor_number}_tiltmotor">
-          <hardwareInterface>EffortJointInterface</hardwareInterface>
-          <mechanicalReduction>1</mechanicalReduction>
-        </actuator>
-    </transmission>
     <link name="${robot_namespace}/rotor_unit_${motor_number}">
       <inertial>
         <mass value="${mass_rotor_unit}" /> <!-- [kg] -->
@@ -183,5 +173,15 @@
         </geometry>
       </collision>
     </link>
+    <transmission name="${robot_namespace}/rotor_unit_${motor_number}_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+        <joint name="${robot_namespace}/rotor_unit_${motor_number}_revolutejoint">
+          <hardwareInterface>EffortJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="${robot_namespace}/rotor_unit_${motor_number}_tiltmotor">
+          <hardwareInterface>EffortJointInterface</hardwareInterface>
+          <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
   </xacro:macro>
 </robot>

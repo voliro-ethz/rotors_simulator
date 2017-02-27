@@ -1,11 +1,11 @@
 <launch>
   <arg name="mav_name" default="mockingbird" />
-  <group ns="$(arg mav_name)">
+
     <rosparam file="$(find rotors_control)/config/servo_motor_control.yaml" command="load"/>
 
     <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
-      output="screen"  args="joint1_position_controller joint_state_controller">
-      <remap from="robot_description" to= "$(arg mav_name)/robot_description"/>
+      output="screen" ns="/mockingbird" args="joint_0_position_controller joint_state_controller">
+      <!-- <remap from="robot_description" to= "$(arg mav_name)/robot_description"/> -->
     </node>
     <!-- Load joint controller configurations from YAML file to parameter server -->
     <!-- <rosparam file="$(find wall_racing_control)/config/vertigo_control.yaml" command="load"/> -->
@@ -30,5 +30,5 @@
     <node pkg="tf" type="static_transform_publisher" name="stp_base_link_ground_truth_odometry_sensorgt_link" args="0 0 0 0 0 0 vertigo/ground_truth vertigo/ground_truth/odometry_sensorgt_link 1" />
     <node pkg="tf" type="static_transform_publisher" name="stp_base_link_imu_link" args="0 0 0 0 0 0 vertigo/ground_truth vertigo/imu_link 1" />
     <node pkg="tf" type="static_transform_publisher" name="stp_base_link_imugt_link" args="0 0 0 0 0 0 vertigo/ground_truth vertigo/imugt_link 1" /> -->
-  </group>
+
 </launch>

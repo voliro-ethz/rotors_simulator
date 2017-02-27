@@ -29,6 +29,7 @@
   <gazebo>
     <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
       <robotNamespace>${namespace}</robotNamespace>
+      <robotParam>${namespace}/robot_description</robotParam>
     </plugin>
   </gazebo>
 
