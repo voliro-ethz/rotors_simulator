@@ -1,4 +1,4 @@
-RotorS
+RotorS 1
 ===============
 
 RotorS is a MAV gazebo simulator.
