@@ -146,7 +146,7 @@
   <!-- Tilting rotorunit link and joint -->
   <xacro:macro name="rotor_unit"
     params="robot_namespace suffix mass_rotor_unit parent motor_number lower_limit upper_limit effort velocity mesh_rotor_unit *origin *inertia">
-    <joint name="${namespace}/rotor_unit_${motor_number}_revolutejoint" type="revolute">
+    <joint name="rotor_unit_${motor_number}_revolutejoint" type="revolute">
       <xacro:insert_block name="origin" />
       <axis xyz="1 0 0" />
        <limit lower="${lower_limit}" upper="${upper_limit}" effort="${effort}" velocity="${velocity}" />
@@ -173,12 +173,12 @@
         </geometry>
       </collision>
     </link>
-    <transmission name="${namespace}/rotor_unit_${motor_number}_trans">
+    <transmission name="rotor_unit_${motor_number}_trans">
       <type>transmission_interface/SimpleTransmission</type>
-        <joint name="${namespace}/rotor_unit_${motor_number}_revolutejoint">
+        <joint name="rotor_unit_${motor_number}_revolutejoint">
           <hardwareInterface>EffortJointInterface</hardwareInterface>
         </joint>
-        <actuator name="${namespace}/rotor_unit_${motor_number}_tiltmotor">
+        <actuator name="rotor_unit_${motor_number}_tiltmotor">
           <hardwareInterface>EffortJointInterface</hardwareInterface>
           <mechanicalReduction>1</mechanicalReduction>
         </actuator>

@@ -29,9 +29,9 @@
   <gazebo>
     <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
       <robotNamespace>${namespace}/mockingbird</robotNamespace>
-       <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
+       <!-- <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType> -->
        <!-- <linkName>${namespace}/base_link</linkName> -->
-      <!-- <robotParam>${namespace}/robot_description</robotParam> -->
+      <robotParam>robot_description</robotParam>
     </plugin>
   </gazebo>
 
