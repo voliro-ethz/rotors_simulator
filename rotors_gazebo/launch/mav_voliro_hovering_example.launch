@@ -1,87 +1,68 @@
 <launch>
-  <arg name="mav_name" default="mockingbird"/>
-  <arg name="world_name" default="basic"/>
-  <arg name="enable_logging" default="false" />
-  <arg name="enable_ground_truth" default="true" />
-  <arg name="log_file" default="$(arg mav_name)" />
-  <arg name="paused" value="true"/>
+    <arg name="mav_name" default="mockingbird"/>
+    <arg name="world_name" default="basic"/>
+    <arg name="enable_logging" default="false"/>
+    <arg name="enable_ground_truth" default="true"/>
+    <arg name="log_file" default="$(arg mav_name)"/>
+    <arg name="paused" value="true"/>
+    <!-- needed for robotdescription  -->
+    <arg name="namespace" default="$(arg mav_name)"/>
+    <arg name="model" default="$(find rotors_description)/urdf/$(arg mav_name)_base.xacro"/>
 
+    <arg name="wait_to_record_bag" default="false"/>
+    <arg name="enable_mavlink_interface" default="false"/>
 
-  <env name="GAZEBO_MODEL_PATH" value="$(find rotors_gazebo)/models"/>
-  <include file="$(find gazebo_ros)/launch/empty_world.launch">
-    <arg name="world_name" value="$(find rotors_gazebo)/worlds/$(arg world_name).world" />
-    <!-- <arg name="debug" value="true"/> -->
-    <arg name="paused" value="$(arg paused)"/>
-    <!-- <arg name="gui" value="false"/> -->
-  </include>
+    <env name="GAZEBO_MODEL_PATH" value="$(find rotors_gazebo)/models"/>
+    <include file="$(find gazebo_ros)/launch/empty_world.launch">
+        <arg name="world_name" value="$(find rotors_gazebo)/worlds/$(arg world_name).world"/>
+        <!-- <arg name="debug" value="true"/> -->
+        <arg name="paused" value="$(arg paused)"/>
+        <!-- <arg name="gui" value="false"/> -->
+    </include>
 
-
-  <!-- <param name="robot_description" command="
-    $(find xacro)/xacro.py '$(find rotors_description)/urdf/$(arg mav_name)_base.xacro'
+    <!-- send the robot XML to param server without namespace for controller interface, else the JointPositionController can't find the urdf -->
+    <param
+        name="robot_description"
+        command="
+    $(find xacro)/xacro.py '$(arg model)'
     enable_logging:=$(arg enable_logging)
     enable_ground_truth:=$(arg enable_ground_truth)
+    enable_mavlink_interface:=$(arg enable_mavlink_interface)
     log_file:=$(arg log_file)
-    mav_name:=${arg mav_name}"/> -->
+    wait_to_record_bag:=$(arg wait_to_record_bag)
+    mav_name:=$(arg mav_name)
+    namespace:=$(arg namespace)"/>
 
-  <group ns="$(arg mav_name)">
-    <include file="$(find rotors_gazebo)/launch/spawn_mav.launch">
-      <arg name="mav_name" value="$(arg mav_name)" />
-      <arg name="model" value="$(find rotors_description)/urdf/mav_generic_odometry_sensor.gazebo" />
-      <arg name="enable_logging" value="$(arg enable_logging)" />
-      <arg name="enable_ground_truth" value="$(arg enable_ground_truth)" />
-      <arg name="log_file" value="$(arg log_file)"/>
-    </include>
-    <node name="voliro_controller_node" pkg="rotors_control" type="voliro_controller_node" output="screen">
-      <rosparam command="load" file="$(find rotors_gazebo)/resource/voliro_controller_$(arg mav_name).yaml" />
-      <rosparam command="load" file="$(find rotors_gazebo)/resource/$(arg mav_name).yaml" />
-      <remap from="odometry" to="odometry_sensor1/odometry" />
-    </node>
-    <node name="hovering_example" pkg="rotors_gazebo" type="hovering_example" output="screen"/>
-    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher">
-      <!-- <remap from="robot_description" to="mockingbird/robot_description"/> -->
-    </node>
-
-    <!-- <param name="robot_description" command="
-      $(find xacro)/xacro.py '$(find rotors_description)/urdf/$(arg mav_name)_base.xacro'
-      enable_logging:=$(arg enable_logging)
-      enable_ground_truth:=$(arg enable_ground_truth)
-      log_file:=$(arg log_file)
-      mav_name:=${arg mav_name}"/> -->
-
-
-    <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
-  </group>
-
-<remap from="mockingbird/robot_description" to= "/robot_description"/>
-
-
-<arg name="namespace" default="$(arg mav_name)"/>
-<arg name="model" default="$(find rotors_description)/urdf/$(arg mav_name)_base.xacro"/>
-
-<arg name="wait_to_record_bag" default="false"/>
-<arg name="enable_mavlink_interface" default="false"/>
-<!-- send the robot XML to param server -->
-<param name="robot_description" command="
-  $(find xacro)/xacro.py '$(arg model)'
-  enable_logging:=$(arg enable_logging)
-  enable_ground_truth:=$(arg enable_ground_truth)
-  enable_mavlink_interface:=$(arg enable_mavlink_interface)
-  log_file:=$(arg log_file)
-  wait_to_record_bag:=$(arg wait_to_record_bag)
-  mav_name:=$(arg mav_name)
-  namespace:=$(arg namespace)"
-/>
-
-<group ns="$(arg mav_name)">
-    <rosparam file="$(find rotors_control)/config/servo_motor_control.yaml" command="load"/>
     <group ns="$(arg mav_name)">
+        <include file="$(find rotors_gazebo)/launch/spawn_mav.launch">
+            <arg name="mav_name" value="$(arg mav_name)"/>
+            <arg name="model" value="$(find rotors_description)/urdf/mav_generic_odometry_sensor.gazebo"/>
+            <arg name="enable_logging" value="$(arg enable_logging)"/>
+            <arg name="enable_ground_truth" value="$(arg enable_ground_truth)"/>
+            <arg name="log_file" value="$(arg log_file)"/>
+        </include>
+        <node name="voliro_controller_node" pkg="rotors_control" type="voliro_controller_node" output="screen">
+            <rosparam command="load" file="$(find rotors_gazebo)/resource/voliro_controller_$(arg mav_name).yaml"/>
+            <rosparam command="load" file="$(find rotors_gazebo)/resource/$(arg mav_name).yaml"/>
+            <remap from="odometry" to="odometry_sensor1/odometry"/>
+        </node>
+        <node name="hovering_example" pkg="rotors_gazebo" type="hovering_example" output="screen"/>
+        <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"></node>
+        <rosparam file="$(find rotors_control)/config/servo_motor_control.yaml" command="load"/>
 
-    <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
-      output="screen" ns="/mockingbird/mockingbird" args="joint_0_position_controller joint_state_controller">
-      <!-- <remap from="robot_description" to= "mockingbird/robot_description"/> -->
-    </node>
-      </group>
-  </group>
+        <group ns="$(arg mav_name)">
+            <node
+                name="controller_spawner"
+                pkg="controller_manager"
+                type="spawner"
+                respawn="false"
+                output="screen"
+                ns="/mockingbird/mockingbird"
+                args="joint_0_position_controller joint_1_position_controller joint_2_position_controller joint_3_position_controller joint_4_position_controller joint_5_position_controller joint_state_controller"></node>
+        </group>
 
-  <!-- <include file="$(find rotors_control)/launch/mockingbird_control.launch" /> -->
+        <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher"/>
+    </group>
+
+    <!-- <include file="$(find rotors_control)/launch/mockingbird_control.launch" /> -->
 </launch>
