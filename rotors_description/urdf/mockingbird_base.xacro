@@ -28,7 +28,7 @@
     <!-- Try to add controller to servo motors -->
     <gazebo>
         <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
-            <robotNamespace>${namespace}/mockingbird</robotNamespace>
+            <robotNamespace>${namespace}</robotNamespace>
             <!-- <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType> -->
             <!-- <linkName>${namespace}/base_link</linkName> -->
             <robotParam>robot_description</robotParam>
