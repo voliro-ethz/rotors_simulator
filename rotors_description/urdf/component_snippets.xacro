@@ -261,8 +261,23 @@
       </plugin>
     </gazebo>
   </xacro:macro>
+  
+  <!-- =============================================================== -->
+  <!-- ==================== ROS INTERFACE MACRO ====================== -->
+  <!-- =============================================================== -->
+  <!-- <xacro:macro 
+  		name="ros_interface_plugin_macro"
+  		params="namespace">
+    <gazebo>
+      <plugin name="ros_interface_plugin" filename="librotors_gazebo_ros_interface_plugin.so">
+        <robotNamespace>${namespace}</robotNamespace>
+      </plugin>
+    </gazebo>
+  </xacro:macro>-->
 
-  <!-- Macro to add the mavlink interface. -->
+  <!-- =============================================================== -->
+  <!-- ================== MAVLINK INTERFACE MACRO ==================== -->
+  <!-- =============================================================== -->
   <xacro:macro name="mavlink_interface_macro" 
     params="namespace mavlink_sub_topic imu_sub_topic mavlink_pub_topic 
       motors_speeds_pub_topic gps_update_freq rotor_count reference_magnetic_field_north 
@@ -294,7 +309,7 @@
   <!-- Macro to add an IMU. -->
   <xacro:macro name="imu_plugin_macro"
     params="namespace imu_suffix parent_link imu_topic
-      mass_imu_sensor gyroscope_noise_density gyroscopoe_random_walk
+      mass_imu_sensor gyroscope_noise_density gyroscope_random_walk
       gyroscope_bias_correlation_time gyroscope_turn_on_bias_sigma
       accelerometer_noise_density accelerometer_random_walk
       accelerometer_bias_correlation_time accelerometer_turn_on_bias_sigma
@@ -322,7 +337,7 @@
         <linkName>${namespace}/imu${imu_suffix}_link</linkName> <!-- (string, required): name of the body which holds the IMU sensor -->
         <imuTopic>${imu_topic}</imuTopic> <!-- (string): name of the sensor output topic and prefix of service names (defaults to imu) -->
         <gyroscopeNoiseDensity>${gyroscope_noise_density}</gyroscopeNoiseDensity> <!-- Gyroscope noise density (two-sided spectrum) [rad/s/sqrt(Hz)] -->
-        <gyroscopeRandomWalk>${gyroscopoe_random_walk}</gyroscopeRandomWalk> <!-- Gyroscope bias random walk [rad/s/s/sqrt(Hz)] -->
+        <gyroscopeRandomWalk>${gyroscope_random_walk}</gyroscopeRandomWalk> <!-- Gyroscope bias random walk [rad/s/s/sqrt(Hz)] -->
         <gyroscopeBiasCorrelationTime>${gyroscope_bias_correlation_time}</gyroscopeBiasCorrelationTime> <!-- Gyroscope bias correlation time constant [s] -->
         <gyroscopeTurnOnBiasSigma>${gyroscope_turn_on_bias_sigma}</gyroscopeTurnOnBiasSigma> <!-- Gyroscope turn on bias standard deviation [rad/s] -->
         <accelerometerNoiseDensity>${accelerometer_noise_density}</accelerometerNoiseDensity> <!-- Accelerometer noise density (two-sided spectrum) [m/s^2/sqrt(Hz)] -->
@@ -508,7 +523,7 @@
   <xacro:macro name="wind_plugin_macro"
     params="namespace xyz_offset wind_direction wind_force_mean
       wind_gust_direction wind_gust_duration wind_gust_start
-      wind_gust_force_mean">
+      wind_gust_force_mean wind_speed_mean">
     <gazebo>
       <plugin filename="librotors_gazebo_wind_plugin.so" name="wind_plugin">
         <frameId>world</frameId>
@@ -521,6 +536,7 @@
         <windGustDuration>${wind_gust_duration}</windGustDuration> <!-- [s] -->
         <windGustStart>${wind_gust_start}</windGustStart> <!-- [s] -->
         <windGustForceMean>${wind_gust_force_mean}</windGustForceMean> <!-- [N] -->
+        <windSpeedMean>${wind_speed_mean}</windSpeedMean> <!-- [m/s] -->
       </plugin>
     </gazebo>
   </xacro:macro>
@@ -732,7 +748,7 @@
       imu_topic="imu"
       mass_imu_sensor="0.015"
       gyroscope_noise_density="0.0003394"
-      gyroscopoe_random_walk="0.000038785"
+      gyroscope_random_walk="0.000038785"
       gyroscope_bias_correlation_time="1000.0"
       gyroscope_turn_on_bias_sigma="0.0087"
       accelerometer_noise_density="0.004"
@@ -753,7 +769,7 @@
       imu_topic="ground_truth/imu"
       mass_imu_sensor="0.00001"
       gyroscope_noise_density="0.0"
-      gyroscopoe_random_walk="0.0"
+      gyroscope_random_walk="0.0"
       gyroscope_bias_correlation_time="1000.0"
       gyroscope_turn_on_bias_sigma="0.0"
       accelerometer_noise_density="0.0"
@@ -805,7 +821,7 @@
       imu_topic="imu"
       mass_imu_sensor="0.015"
       gyroscope_noise_density="0.0003394"
-      gyroscopoe_random_walk="0.000038785"
+      gyroscope_random_walk="0.000038785"
       gyroscope_bias_correlation_time="1000.0"
       gyroscope_turn_on_bias_sigma="0.0087"
       accelerometer_noise_density="0.004"
