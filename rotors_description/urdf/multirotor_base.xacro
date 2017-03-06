@@ -37,7 +37,7 @@
 
   <!-- Main multirotor link -->
   <xacro:macro name="multirotor_base_macro"
-    params="robot_namespace mass body_width body_height use_mesh_file mesh_file *inertia">
+    params="robot_namespace mass color body_width body_height use_mesh_file mesh_file *inertia">
     <link name="${robot_namespace}/base_link"></link>
 
     <joint name="${robot_namespace}/base_joint" type="fixed">
@@ -72,7 +72,9 @@
         </geometry>
       </collision>
     </link>
-
+    <gazebo reference="${robot_namespace}/base_link">
+      <material>Gazebo/${color}</material>
+    </gazebo>
     <!-- attach multirotor_base_plugin to the base_link -->
     <gazebo>
       <plugin filename="librotors_gazebo_multirotor_base_plugin.so" name="multirotor_base_plugin">
@@ -145,17 +147,17 @@
 
   <!-- Tilting rotorunit link and joint -->
   <xacro:macro name="rotor_unit"
-    params="robot_namespace suffix mass_rotor_unit parent motor_number lower_limit upper_limit effort velocity mesh_rotor_unit *origin *inertia">
-    <joint name="${robot_namespace}/rotor_unit_${motor_number}_revolutejoint" type="revolute">
+    params="robot_namespace suffix mass_rotor_unit parent motor_number lower_limit upper_limit effort velocity mesh_rotor_unit color *origin *inertia">
+    <joint name="rotor_unit_${motor_number}_revolutejoint" type="revolute">
       <xacro:insert_block name="origin" />
       <axis xyz="1 0 0" />
        <limit lower="${lower_limit}" upper="${upper_limit}" effort="${effort}" velocity="${velocity}" />
       <!-- TODO(ff): not currently set because it's not yet supported -->
       <!-- <limit effort="2000" velocity="${max_rot_velocity}" /> -->
       <parent link="${parent}" />
-      <child link="${robot_namespace}/rotor_unit_${motor_number}" />
+      <child link="${namespace}/rotor_unit_${motor_number}" />
     </joint>
-    <link name="${robot_namespace}/rotor_unit_${motor_number}">
+    <link name="${namespace}/rotor_unit_${motor_number}">
       <inertial>
         <mass value="${mass_rotor_unit}" /> <!-- [kg] -->
         <xacro:insert_block name="inertia" />
@@ -173,15 +175,18 @@
         </geometry>
       </collision>
     </link>
-    <transmission name="${robot_namespace}/rotor_unit_${motor_number}_trans">
+    <transmission name="rotor_unit_${motor_number}_trans">
       <type>transmission_interface/SimpleTransmission</type>
-        <joint name="${robot_namespace}/rotor_unit_${motor_number}_revolutejoint">
+        <joint name="rotor_unit_${motor_number}_revolutejoint">
           <hardwareInterface>EffortJointInterface</hardwareInterface>
         </joint>
-        <actuator name="${robot_namespace}/rotor_unit_${motor_number}_tiltmotor">
+        <actuator name="rotor_unit_${motor_number}_tiltmotor">
           <hardwareInterface>EffortJointInterface</hardwareInterface>
           <mechanicalReduction>1</mechanicalReduction>
         </actuator>
     </transmission>
+    <gazebo reference="${robot_namespace}/rotor_unit_${motor_number}">
+      <material>Gazebo/${color}</material>
+    </gazebo>
   </xacro:macro>
 </robot>
