@@ -8,29 +8,9 @@
     <!-- needed for robotdescription  -->
     <arg name="namespace" default="$(arg mav_name)"/>
     <arg name="model" default="$(find rotors_description)/urdf/$(arg mav_name)_base.xacro"/>
+
     <arg name="wait_to_record_bag" default="false"/>
-    <arg name="enable_mavlink_interface" default="true"/>
-
-    <!-- Argumente von pixhawk and mavros -->
-    <arg name="vehicle" default="iris"/>
-    <arg name="est" default="lpe"/>
-    <arg name="rcS" default="$(find px4)/posix-configs/SITL/init/$(arg est)/$(arg vehicle)"/>
-    <arg name="fcu_url" default="udp://:14540@localhost:14557"/>
-    <arg name="pluginlists_yaml" default="$(find mavros)/launch/px4_pluginlists.yaml"/>
-    <arg name="config_yaml" default="$(find mavros)/launch/px4_config.yaml"/>
-
-    <!-- send the robot XML to param server without namespace for controller interface, else the JointPositionController can't find the urdf -->
-    <param
-        name="robot_description"
-        command="
-        $(find xacro)/xacro.py '$(arg model)'
-        enable_logging:=$(arg enable_logging)
-        enable_ground_truth:=$(arg enable_ground_truth)
-        enable_mavlink_interface:=$(arg enable_mavlink_interface)
-        log_file:=$(arg log_file)
-        wait_to_record_bag:=$(arg wait_to_record_bag)
-        mav_name:=$(arg mav_name)
-        namespace:=$(arg namespace)"/>
+    <arg name="enable_mavlink_interface" default="false"/>
 
     <env name="GAZEBO_MODEL_PATH" value="$(find rotors_gazebo)/models"/>
     <include file="$(find gazebo_ros)/launch/empty_world.launch">
@@ -40,15 +20,23 @@
         <!-- <arg name="gui" value="false"/> -->
     </include>
 
-    <!-- pixhawk and mavros -->
-    <node name="sitl" pkg="px4" type="px4" output="screen" args="$(find px4) $(arg rcS)"></node>
-    <include file="$(find px4)/launch/mavros.launch">
-        <arg name="ns" value="$(arg namespace)"/>
-        <arg name="gcs_url" value=""/>  <!-- GCS link is provided by SITL -->
-        <arg name="fcu_url" value="$(arg fcu_url)"/>
-        <arg name="pluginlists_yaml" value="$(arg pluginlists_yaml)"/>
-        <arg name="config_yaml" value="$(arg config_yaml)"/>
+    <!-- include pixhawk sitl mavros launch file  -->
+    <include file="$(find px4)/launch/mavros_posix_sitl.launch">
+
     </include>
+
+    <!-- send the robot XML to param server without namespace for controller interface, else the JointPositionController can't find the urdf -->
+    <param
+        name="robot_description"
+        command="
+    $(find xacro)/xacro.py '$(arg model)'
+    enable_logging:=$(arg enable_logging)
+    enable_ground_truth:=$(arg enable_ground_truth)
+    enable_mavlink_interface:=$(arg enable_mavlink_interface)
+    log_file:=$(arg log_file)
+    wait_to_record_bag:=$(arg wait_to_record_bag)
+    mav_name:=$(arg mav_name)
+    namespace:=$(arg namespace)"/>
 
     <group ns="$(arg mav_name)">
         <include file="$(find rotors_gazebo)/launch/spawn_mav.launch">
@@ -63,7 +51,6 @@
             <rosparam command="load" file="$(find rotors_gazebo)/resource/$(arg mav_name).yaml"/>
             <remap from="odometry" to="odometry_sensor1/odometry"/>
         </node>
-        <!-- <node name="simulation_mavros_interface" pkg="offboard" type="simulation_mavros_interface" output="screen" /> -->
         <node name="hovering_example" pkg="rotors_gazebo" type="hovering_example" output="screen"/>
         <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"></node>
         <rosparam file="$(find rotors_control)/config/servo_motor_control.yaml" command="load"/>
