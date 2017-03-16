@@ -1,33 +1,31 @@
 <launch>
-    <arg name="mav_name" default="mockingbird"/>
-    <arg name="world_name" default="basic"/>
-    <arg name="enable_logging" default="false"/>
-    <arg name="enable_ground_truth" default="false"/>
-    <arg name="log_file" default="$(arg mav_name)"/>
-    <arg name="paused" value="true"/>
-    <!-- needed for robotdescription  -->
-    <arg name="namespace" default="$(arg mav_name)"/>
-    <arg name="model" default="$(find rotors_description)/urdf/$(arg mav_name)_base.xacro"/>
-    <arg name="wait_to_record_bag" default="false"/>
-    <arg name="enable_mavlink_interface" default="true"/>
+  <arg name="mav_name" default="mockingbird"/>
+  <arg name="world_name" default="basic"/>
+  <arg name="enable_logging" default="false"/>
+  <arg name="enable_ground_truth" default="false"/>
+  <arg name="log_file" default="$(arg mav_name)"/>
+  <arg name="paused" value="true"/>
+  <!-- needed for robotdescription  -->
+  <arg name="namespace" default="$(arg mav_name)"/>
+  <arg name="model" default="$(find rotors_description)/urdf/$(arg mav_name)_base.xacro"/>
+  <arg name="wait_to_record_bag" default="false"/>
+  <arg name="enable_mavlink_interface" default="true"/>
 
-    <!-- Argumente von pixhawk and mavros -->
-    <arg name="vehicle" default="mockingbird"/>
-    <arg name="est" default="lpe"/>
-    <arg name="rcS" default="$(find px4)/posix-configs/SITL/init/$(arg est)/$(arg vehicle)"/>
-    <arg name="fcu_url" default="udp://:14540@127.0.01:14557"/>
-    <arg name="pluginlists_yaml" default="$(find mavros)/launch/px4_pluginlists.yaml"/>
-    <arg name="config_yaml" default="$(find mavros)/launch/px4_config.yaml"/>
-    <arg name="tgt_system" default="1" />
-    <arg name="tgt_component" default="1" />
-    <arg name="gcs_url" default="udp://:14550@:14555" />
+  <!-- Arguments of pixhawk and mavros -->
+  <arg name="vehicle" default="mockingbird"/>
+  <arg name="est" default="lpe"/>
+  <arg name="rcS" default="$(find px4)/posix-configs/SITL/init/$(arg est)/$(arg vehicle)"/>
+  <arg name="fcu_url" default="udp://:14540@127.0.01:14557"/>
+  <arg name="pluginlists_yaml" default="$(find mavros)/launch/px4_pluginlists.yaml"/>
+  <arg name="config_yaml" default="$(find mavros)/launch/px4_config.yaml"/>
+  <arg name="tgt_system" default="1"/>
+  <arg name="tgt_component" default="1"/>
+  <arg name="gcs_url" default="udp://:14550@:14555"/>
 
-
-
-    <!-- send the robot XML to param server without namespace for controller interface, else the JointPositionController can't find the urdf -->
-    <param
-        name="robot_description"
-        command="
+  <!-- send the robot XML to param server without namespace for controller interface, else the JointPositionController can't find the urdf -->
+  <param
+    name="robot_description"
+    command="
         $(find xacro)/xacro.py '$(arg model)'
         enable_logging:=$(arg enable_logging)
         enable_ground_truth:=$(arg enable_ground_truth)
@@ -37,69 +35,67 @@
         mav_name:=$(arg mav_name)
         namespace:=$(arg namespace)"/>
 
-    <env name="GAZEBO_MODEL_PATH" value="$(find rotors_gazebo)/models"/>
-    <include file="$(find gazebo_ros)/launch/empty_world.launch">
-        <arg name="world_name" value="$(find rotors_gazebo)/worlds/$(arg world_name).world"/>
-        <!-- <arg name="debug" value="true"/> -->
-        <arg name="paused" value="$(arg paused)"/>
-        <!-- <arg name="gui" value="false"/> -->
-    </include>
+  <env name="GAZEBO_MODEL_PATH" value="$(find rotors_gazebo)/models"/>
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="$(find rotors_gazebo)/worlds/$(arg world_name).world"/>
+    <!-- <arg name="debug" value="true"/> -->
+    <arg name="paused" value="$(arg paused)"/>
+    <!-- <arg name="gui" value="false"/> -->
+  </include>
 
-    <!-- pixhawk and mavros -->
-    <node name="sitl" pkg="px4" type="px4" output="screen" args="$(find px4) $(arg rcS)"></node>
+  <!-- Launch Pixhawk -->
+  <node name="sitl" pkg="px4" type="px4" output="screen" args="$(find px4) $(arg rcS)"></node>
 
-    <!-- <include file="$(find px4)/launch/mavros.launch">
+  <!-- <include file="$(find px4)/launch/mavros.launch">
         <arg name="ns" value="$(arg namespace)"/>
         <arg name="gcs_url" value=""/>  -->
-       <!-- GCS link is provided by SITL -->
-      <!--  <arg name="fcu_url" value="$(arg fcu_url)"/>
+  <!-- GCS link is provided by SITL -->
+  <!--  <arg name="fcu_url" value="$(arg fcu_url)"/>
         <arg name="pluginlists_yaml" value="$(arg pluginlists_yaml)"/>
         <arg name="config_yaml" value="$(arg config_yaml)"/>
     </include> -->
 
+  <!-- Launch MAVROS -->
+  <include file="$(find mavros)/launch/node.launch">
+    <arg name="pluginlists_yaml" value="$(arg pluginlists_yaml)"/>
+    <arg name="config_yaml" value="$(arg config_yaml)"/>
 
+    <arg name="fcu_url" value="$(arg fcu_url)"/>
+    <arg name="gcs_url" value="$(arg gcs_url)"/>
+    <arg name="tgt_system" value="$(arg tgt_system)"/>
+    <arg name="tgt_component" value="$(arg tgt_component)"/>
+  </include>
 
-    <group ns="$(arg mav_name)">
+  <group ns="$(arg mav_name)">
+    <include file="$(find rotors_gazebo)/launch/spawn_mav.launch">
+      <arg name="mav_name" value="$(arg mav_name)"/>
+      <arg name="model" value="$(find rotors_description)/urdf/mav_generic_odometry_sensor.gazebo"/>
+      <arg name="enable_logging" value="$(arg enable_logging)"/>
+      <arg name="enable_ground_truth" value="$(arg enable_ground_truth)"/>
+      <arg name="log_file" value="$(arg log_file)"/>
+    </include>
+    <node name="voliro_controller_node" pkg="rotors_control" type="voliro_controller_node" output="screen">
+      <rosparam command="load" file="$(find rotors_gazebo)/resource/voliro_controller_$(arg mav_name).yaml"/>
+      <rosparam command="load" file="$(find rotors_gazebo)/resource/$(arg mav_name).yaml"/>
+      <remap from="odometry" to="odometry_sensor1/odometry"/>
+    </node>
+    <node name="hovering_example" pkg="rotors_gazebo" type="hovering_example" output="screen"/>
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"></node>
+    <rosparam file="$(find rotors_control)/config/servo_motor_control.yaml" command="load"/>
+    <node name="simulation_mavros_interface" pkg="simulation_mavros_interface" type="simulation_mavros_interface"/>
+    <node name="test_publisher" pkg="simulation_mavros_interface" type="test_publisher"/>
 
-        <include file="$(find mavros)/launch/node.launch">
-            <arg name="pluginlists_yaml" value="$(arg pluginlists_yaml)" />
-            <arg name="config_yaml" value="$(arg config_yaml)" />
+    <node
+      name="controller_spawner"
+      pkg="controller_manager"
+      type="spawner"
+      respawn="false"
+      output="screen"
+      ns="/mockingbird"
+      args="joint_0_position_controller joint_1_position_controller joint_2_position_controller joint_3_position_controller joint_4_position_controller joint_5_position_controller joint_state_controller"></node>
 
-            <arg name="fcu_url" value="$(arg fcu_url)" />
-            <arg name="gcs_url" value="$(arg gcs_url)" />
-            <arg name="tgt_system" value="$(arg tgt_system)" />
-            <arg name="tgt_component" value="$(arg tgt_component)" />
-        </include>
+    <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher"/>
+  </group>
 
-        <include file="$(find rotors_gazebo)/launch/spawn_mav.launch">
-            <arg name="mav_name" value="$(arg mav_name)"/>
-            <arg name="model" value="$(find rotors_description)/urdf/mav_generic_odometry_sensor.gazebo"/>
-            <arg name="enable_logging" value="$(arg enable_logging)"/>
-            <arg name="enable_ground_truth" value="$(arg enable_ground_truth)"/>
-            <arg name="log_file" value="$(arg log_file)"/>
-        </include>
-        <node name="voliro_controller_node" pkg="rotors_control" type="voliro_controller_node" output="screen">
-            <rosparam command="load" file="$(find rotors_gazebo)/resource/voliro_controller_$(arg mav_name).yaml"/>
-            <rosparam command="load" file="$(find rotors_gazebo)/resource/$(arg mav_name).yaml"/>
-            <remap from="odometry" to="odometry_sensor1/odometry"/>
-        </node>
-        <node name="hovering_example" pkg="rotors_gazebo" type="hovering_example" output="screen"/>
-        <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"></node>
-        <rosparam file="$(find rotors_control)/config/servo_motor_control.yaml" command="load"/>
-        <node name="simulation_mavros_interface" pkg="simulation_mavros_interface" type="simulation_mavros_interface" />
-        <node name="test_publisher" pkg="simulation_mavros_interface" type="test_publisher" />
-
-        <node
-            name="controller_spawner"
-            pkg="controller_manager"
-            type="spawner"
-            respawn="false"
-            output="screen"
-            ns="/mockingbird"
-            args="joint_0_position_controller joint_1_position_controller joint_2_position_controller joint_3_position_controller joint_4_position_controller joint_5_position_controller joint_state_controller"></node>
-
-        <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher"/>
-    </group>
-
-    <!-- <include file="$(find rotors_control)/launch/mockingbird_control.launch" /> -->
+  <!-- <include file="$(find rotors_control)/launch/mockingbird_control.launch" /> -->
 </launch>
