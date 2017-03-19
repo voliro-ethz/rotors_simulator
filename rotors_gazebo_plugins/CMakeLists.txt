@@ -8,6 +8,8 @@
 #                                               if BUILD_MAVLINK_INTERFACE_PLUGIN=TRUE.
 # NO_ROS                            bool    Build without any ROS dependencies.
 
+set(BUILD_MAVLINK_INTERFACE_PLUGIN true)
+
 cmake_minimum_required(VERSION 2.8.3)
 project(rotors_gazebo_plugins)
 #
@@ -292,10 +294,10 @@ if (BUILD_MAVLINK_INTERFACE_PLUGIN)
   else()
 
     message(STATUS "MAVLINK_HEADER_DIR not provided, falling back to looking at default paths...")
-    # If ROS indigo is installed, we should be able to find them at the path below
-    if(EXISTS /opt/ros/indigo/include/mavlink/v1.0/)
-      message(STATUS "Found MAVLink headers at '/opt/ros/indigo/include/mavlink/v1.0/'.")
-      include_directories("/opt/ros/indigo/include/mavlink/v1.0/")
+    # If ROS kinetic is installed, we should be able to find them at the path below
+    if(EXISTS /opt/ros/kinetic/include/mavlink/v1.0/)
+      message(STATUS "Found MAVLink headers at '/opt/ros/kinetic/include/mavlink/v1.0/'.")
+      include_directories("/opt/ros/kinetic/include/mavlink/v1.0/")
       set(MAVLINK_HEADERS_FOUND TRUE)
     endif()
 
