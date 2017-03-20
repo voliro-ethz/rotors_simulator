@@ -51,6 +51,11 @@ GazeboMavlinkInterface::~GazeboMavlinkInterface() {
 
 void GazeboMavlinkInterface::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf) {
 
+  ros::NodeHandle nodeHandle_;
+  hil_gps_pub_ = nodeHandle_.advertise<mavros_msgs::hil_gps_msg>("/mavros/voliro/hil_gps_msg", 1);
+  sensor_pub_ = nodeHandle_.advertise<mavros_msgs::sensor_msg>("/mavros/voliro/sensor_msg", 1);
+  hil_state_quat_pub_ = nodeHandle_.advertise<mavros_msgs::hil_state_quat>("/mavros/voliro/hil_state_quat", 1);
+
   if(kPrintOnPluginLoad) {
     gzdbg << __FUNCTION__ << "() called." << std::endl;
   }
@@ -493,13 +498,13 @@ void GazeboMavlinkInterface::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf
   fds_[0].fd = fd_;
   fds_[0].events = POLLIN;
 
-
 }
 
 
 void GazeboMavlinkInterface::OnUpdate(const common::UpdateInfo& /*_info*/) {
 
-  common::Time current_time = world_->GetSimTime();
+  // common::Time
+  current_time = world_->GetSimTime();
   double dt = (current_time - last_time_).Double();
 
   pollForMAVLinkMessages(dt, 1000);
@@ -569,6 +574,22 @@ void GazeboMavlinkInterface::OnUpdate(const common::UpdateInfo& /*_info*/) {
     hil_gps_msg.cog = atan2(hil_gps_msg.ve, hil_gps_msg.vn) * 180.0/3.1416 * 100.0;
     hil_gps_msg.satellites_visible = 10;
 
+    mavros_msgs::hil_gps_msg hil_gps_msg_;
+
+    hil_gps_msg_.header.stamp = ros::Time(current_time.sec, current_time.nsec);
+    hil_gps_msg_.fix_type = hil_gps_msg.fix_type;
+    hil_gps_msg_.lat = hil_gps_msg.lat;
+    hil_gps_msg_.lon = hil_gps_msg.lon;
+    hil_gps_msg_.alt = hil_gps_msg.alt;
+    hil_gps_msg_.eph = hil_gps_msg.eph;
+    hil_gps_msg_.epv = hil_gps_msg.epv;
+    hil_gps_msg_.vel = hil_gps_msg.vel;
+    hil_gps_msg_.vn = hil_gps_msg.vn;
+    hil_gps_msg_.ve = hil_gps_msg.ve;
+    hil_gps_msg_.vd = hil_gps_msg.vd;
+    hil_gps_msg_.cog = hil_gps_msg.cog;
+    hil_gps_msg_.satellites_visible = hil_gps_msg.satellites_visible;
+
     /*static int gps_debug_msg_count = 0;
     if(gps_debug_msg_count >= 0) {
       gzmsg << "{ "
@@ -590,7 +611,8 @@ void GazeboMavlinkInterface::OnUpdate(const common::UpdateInfo& /*_info*/) {
     }
     gps_debug_msg_count++;*/
 
-    send_mavlink_message(MAVLINK_MSG_ID_HIL_GPS, &hil_gps_msg, 200);
+    // send_mavlink_message(MAVLINK_MSG_ID_HIL_GPS, &hil_gps_msg, 200);
+    hil_gps_pub_.publish(hil_gps_msg_);
 
     // Also publish GPS info on Gazebo topic
     msgs::Vector3d gps_msg;
@@ -762,6 +784,24 @@ void GazeboMavlinkInterface::ImuCallback(ImuPtr& imu_message) {
   optflow_ygyro_ = gyro_b.y;
   optflow_zgyro_ = gyro_b.z;
 
+  mavros_msgs::sensor_msg sensor_msg_;
+
+  sensor_msg_.header.stamp = ros::Time(current_time.sec, current_time.nsec);
+  sensor_msg_.xacc = sensor_msg.xacc;
+  sensor_msg_.yacc = sensor_msg.yacc;
+  sensor_msg_.zacc = sensor_msg.zacc;
+  sensor_msg_.xgyro = sensor_msg.xgyro;
+  sensor_msg_.ygyro = sensor_msg.ygyro;
+  sensor_msg_.zgyro = sensor_msg.zgyro;
+  sensor_msg_.xmag = sensor_msg.xmag;
+  sensor_msg_.ymag = sensor_msg.ymag;
+  sensor_msg_.zmag = sensor_msg.zmag;
+  sensor_msg_.abs_pressure = sensor_msg.abs_pressure;
+  sensor_msg_.diff_pressure = sensor_msg.diff_pressure;
+  sensor_msg_.pressure_alt = sensor_msg.pressure_alt;
+  sensor_msg_.temperature = sensor_msg.temperature;
+  sensor_msg_.fields_updated = sensor_msg.fields_updated;
+
   /*static int imu_msg_count = 0;
   if(imu_msg_count >= 100) {
     gzmsg << "{ "
@@ -785,7 +825,8 @@ void GazeboMavlinkInterface::ImuCallback(ImuPtr& imu_message) {
   }
   imu_msg_count++;*/
 
-  send_mavlink_message(MAVLINK_MSG_ID_HIL_SENSOR, &sensor_msg, 200);
+  // send_mavlink_message(MAVLINK_MSG_ID_HIL_SENSOR, &sensor_msg, 200);
+  sensor_pub_.publish(sensor_msg_);
 
   // ground truth
   math::Vector3 accel_true_b = q_br.RotateVector(model_->GetRelativeLinearAccel());
@@ -818,6 +859,29 @@ void GazeboMavlinkInterface::ImuCallback(ImuPtr& imu_message) {
   hil_state_quat.yacc = accel_true_b.y * 1000;
   hil_state_quat.zacc = accel_true_b.z * 1000;
 
+  mavros_msgs::hil_state_quat hil_state_quat_;
+
+  hil_state_quat_.header.stamp = ros::Time(current_time.sec, current_time.nsec);
+  hil_state_quat_.attitude_quaternion[0] = hil_state_quat.attitude_quaternion[0];
+  hil_state_quat_.attitude_quaternion[1] = hil_state_quat.attitude_quaternion[1];
+  hil_state_quat_.attitude_quaternion[2] = hil_state_quat.attitude_quaternion[2];
+  hil_state_quat_.attitude_quaternion[3] = hil_state_quat.attitude_quaternion[3];
+  hil_state_quat_.rollspeed = hil_state_quat.rollspeed;
+  hil_state_quat_.pitchspeed = hil_state_quat.pitchspeed;
+  hil_state_quat_.yawspeed = hil_state_quat.yawspeed;
+  hil_state_quat_.lat = hil_state_quat.lat;
+  hil_state_quat_.lon = hil_state_quat.lon;
+  hil_state_quat_.alt = hil_state_quat.alt;
+  hil_state_quat_.vx = hil_state_quat.vx;
+  hil_state_quat_.vy = hil_state_quat.vy;
+  hil_state_quat_.vz = hil_state_quat.vz;
+  hil_state_quat_.ind_airspeed = hil_state_quat.ind_airspeed;
+  hil_state_quat_.true_airspeed = hil_state_quat.true_airspeed;
+  hil_state_quat_.xacc = hil_state_quat.xacc;
+  hil_state_quat_.yacc = hil_state_quat.yacc;
+  hil_state_quat_.zacc = hil_state_quat.zacc;
+
+
   /*static int quat_msg_count = 0;
   if(quat_msg_count >= 100) {
     gzmsg << "{ "
@@ -845,7 +909,8 @@ void GazeboMavlinkInterface::ImuCallback(ImuPtr& imu_message) {
   }
   quat_msg_count++;*/
 
-  send_mavlink_message(MAVLINK_MSG_ID_HIL_STATE_QUATERNION, &hil_state_quat, 200);
+  // send_mavlink_message(MAVLINK_MSG_ID_HIL_STATE_QUATERNION, &hil_state_quat, 200);
+  hil_state_quat_pub_.publish(hil_state_quat_);
 }
 
 void GazeboMavlinkInterface::LidarCallback(LidarPtr& lidar_message) {
@@ -866,7 +931,7 @@ void GazeboMavlinkInterface::LidarCallback(LidarPtr& lidar_message) {
   //distance needed for optical flow message
   optflow_distance_ = lidar_message->current_distance(); //[m]
 
-  send_mavlink_message(MAVLINK_MSG_ID_DISTANCE_SENSOR, &sensor_msg, 200);
+  // send_mavlink_message(MAVLINK_MSG_ID_DISTANCE_SENSOR, &sensor_msg, 200);
 
 }
 
@@ -888,7 +953,7 @@ void GazeboMavlinkInterface::OpticalFlowCallback(OpticalFlowPtr& opticalFlow_mes
   sensor_msg.time_delta_distance_us = opticalFlow_message->time_delta_distance_us();
   sensor_msg.distance = optflow_distance_;
 
-  send_mavlink_message(MAVLINK_MSG_ID_HIL_OPTICAL_FLOW, &sensor_msg, 200);
+  // send_mavlink_message(MAVLINK_MSG_ID_HIL_OPTICAL_FLOW, &sensor_msg, 200);
 }
 
 /*ssize_t GazeboMavlinkInterface::receive(void *_buf, const size_t _size, uint32_t _timeoutMs)
