@@ -44,6 +44,7 @@
   <xacro:multirotor_base_macro
     robot_namespace="${namespace}"
     mass="${mass}"
+    color="White"
     body_width="${body_width}"
     body_height="${body_height}"
     use_mesh_file="${use_mesh_file}"
