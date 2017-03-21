@@ -9,7 +9,7 @@
     <arg name="vehicle" default="iris"/>
     <arg name="est" default="lpe"/>
     <arg name="rcS" default="$(find px4)/posix-configs/SITL/init/$(arg est)/$(arg vehicle)"/>
-    <arg name="fcu_url" default="udp://:14540@127.0.01:14560"/>
+    <arg name="fcu_url" default="udp://:14560@127.0.01:14556"/>
     <arg name="pluginlists_yaml" default="$(find mavros)/launch/px4_pluginlists.yaml"/>
     <arg name="config_yaml" default="$(find mavros)/launch/px4_config.yaml"/>
     <arg name="tgt_system" default="1"/>
