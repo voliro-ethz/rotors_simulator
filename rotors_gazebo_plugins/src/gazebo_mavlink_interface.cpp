@@ -52,9 +52,9 @@ GazeboMavlinkInterface::~GazeboMavlinkInterface() {
 void GazeboMavlinkInterface::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf) {
 
   ros::NodeHandle nodeHandle_;
-  hil_gps_pub_ = nodeHandle_.advertise<mavros_msgs::hil_gps_msg>("/mavros/voliro/hil_gps_msg", 1);
-  sensor_pub_ = nodeHandle_.advertise<mavros_msgs::sensor_msg>("/mavros/voliro/sensor_msg", 1);
-  hil_state_quat_pub_ = nodeHandle_.advertise<mavros_msgs::hil_state_quat>("/mavros/voliro/hil_state_quat", 1);
+  hil_gps_pub_ = nodeHandle_.advertise<mavros_msgs::hil_gps_msg>("/mockingbird/mavros/voliro/hil_gps_msg", 1);
+  sensor_pub_ = nodeHandle_.advertise<mavros_msgs::sensor_msg>("/mockingbird/mavros/voliro/sensor_msg", 1);
+  hil_state_quat_pub_ = nodeHandle_.advertise<mavros_msgs::hil_state_quat>("/mockingbird/mavros/voliro/hil_state_quat", 1);
 
   if(kPrintOnPluginLoad) {
     gzdbg << __FUNCTION__ << "() called." << std::endl;
