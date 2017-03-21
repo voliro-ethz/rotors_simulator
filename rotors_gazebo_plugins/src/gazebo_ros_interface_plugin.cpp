@@ -103,6 +103,7 @@ void GazeboRosInterfacePlugin::Load(physics::WorldPtr _world,
 }
 
 void GazeboRosInterfacePlugin::OnUpdate(const common::UpdateInfo& _info) {
+  ROS_INFO_STREAM("Voliro was here on Update");
   // Do nothing
   // This plugins actions are all executed through message callbacks.
 }
@@ -406,6 +407,7 @@ void GazeboRosInterfacePlugin::GzImuMsgCallback(GzImuPtr& gz_imu_msg,
   ros_imu_msg_.orientation.y = gz_imu_msg->orientation().y();
   ros_imu_msg_.orientation.z = gz_imu_msg->orientation().z();
   ros_imu_msg_.orientation.w = gz_imu_msg->orientation().w();
+  ROS_INFO_STREAM("Voliro was here IMU");
 
   // Orientation covariance should have 9 elements, and both the Gazebo and ROS
   // arrays should be the same size!

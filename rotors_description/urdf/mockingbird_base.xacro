@@ -35,6 +35,9 @@
         </plugin>
     </gazebo>
 
+    <!-- RosInterface -->
+    <xacro:ros_interface_plugin_macro namespace="${namespace}"/>
+
     <xacro:if value="$(arg enable_mavlink_interface)">
         <!-- Instantiate mavlink telemetry interface. -->
         <xacro:default_mavlink_interface namespace="${namespace}" imu_sub_topic="imu" rotor_count="6"/>
