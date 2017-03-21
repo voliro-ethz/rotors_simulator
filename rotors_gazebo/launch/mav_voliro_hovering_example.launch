@@ -12,7 +12,7 @@
   <arg name="enable_mavlink_interface" default="true"/>
 
   <!-- Arguments of pixhawk and mavros -->
-  <arg name="vehicle" default="mockingbird"/>
+  <arg name="vehicle" default="iris"/>
   <arg name="est" default="lpe"/>
   <arg name="rcS" default="$(find px4)/posix-configs/SITL/init/$(arg est)/$(arg vehicle)"/>
   <arg name="fcu_url" default="udp://:14540@127.0.01:14557"/>
@@ -97,5 +97,4 @@
     <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher"/>
   </group>
 
-  <!-- <include file="$(find rotors_control)/launch/mockingbird_control.launch" /> -->
 </launch>
