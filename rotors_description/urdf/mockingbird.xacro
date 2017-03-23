@@ -71,6 +71,7 @@
   <xacro:multirotor_base_macro
     robot_namespace="${namespace}"
     mass="${mass_core}"
+    color="DarkGrey"
     body_width="${body_width}"
     body_height="${body_height}"
     use_mesh_file="${use_mesh_file_core}"
@@ -83,13 +84,14 @@
   <xacro:rotor_unit
     robot_namespace="${namespace}"
     suffix="left"
-    parent="${namespace}/base_link"
+    parent="mockingbird/base_link"
     mass_rotor_unit="${mass_rotor_unit}"
     motor_number="0"
     lower_limit="${lower_limit_revolute}"
     upper_limit="${upper_limit_revolute}"
     effort="${effort_revolute}"
     velocity="${velocity_revolute}"
+    color="Red"
     mesh_rotor_unit="${mesh_file_rotor_unit}">
     <origin xyz="${cos30*arm_length} ${sin30*arm_length} 0" rpy="0 0 0.52359877559" />
     <xacro:insert_block name="rotor_unit_inertia" />
@@ -98,13 +100,14 @@
   <xacro:rotor_unit
     robot_namespace="${namespace}"
     suffix="front_left"
-    parent="${namespace}/base_link"
+    parent="mockingbird/base_link"
     mass_rotor_unit="${mass_rotor_unit}"
     motor_number="1"
     lower_limit="${lower_limit_revolute}"
     upper_limit="${upper_limit_revolute}"
     effort="${effort_revolute}"
     velocity="${velocity_revolute}"
+    color="Red"
     mesh_rotor_unit="${mesh_file_rotor_unit}">
     <origin xyz="0 ${arm_length} 0" rpy="0 0 1.57079632679" />
     <xacro:insert_block name="rotor_unit_inertia" />
@@ -113,13 +116,14 @@
   <xacro:rotor_unit
     robot_namespace="${namespace}"
     suffix="back_left"
-    parent="${namespace}/base_link"
+    parent="mockingbird/base_link"
     mass_rotor_unit="${mass_rotor_unit}"
     motor_number="2"
     lower_limit="${lower_limit_revolute}"
     upper_limit="${upper_limit_revolute}"
     effort="${effort_revolute}"
     velocity="${velocity_revolute}"
+    color="Red"
     mesh_rotor_unit="${mesh_file_rotor_unit}">
     <origin xyz="-${cos30*arm_length} ${sin30*arm_length} 0" rpy="0 0 2.61799387799" />
     <xacro:insert_block name="rotor_unit_inertia" />
@@ -128,13 +132,14 @@
   <xacro:rotor_unit
     robot_namespace="${namespace}"
     suffix="back_right"
-    parent="${namespace}/base_link"
+    parent="mockingbird/base_link"
     mass_rotor_unit="${mass_rotor_unit}"
     motor_number="3"
     lower_limit="${lower_limit_revolute}"
     upper_limit="${upper_limit_revolute}"
     effort="${effort_revolute}"
     velocity="${velocity_revolute}"
+    color="Red"
     mesh_rotor_unit="${mesh_file_rotor_unit}">
     <origin xyz="-${cos30*arm_length} -${sin30*arm_length} 0" rpy="0 0 3.66519142919" />
     <xacro:insert_block name="rotor_unit_inertia" />
@@ -143,13 +148,14 @@
   <xacro:rotor_unit
     robot_namespace="${namespace}"
     suffix="right"
-    parent="${namespace}/base_link"
+    parent="mockingbird/base_link"
     mass_rotor_unit="${mass_rotor_unit}"
     motor_number="4"
     lower_limit="${lower_limit_revolute}"
     upper_limit="${upper_limit_revolute}"
     effort="${effort_revolute}"
     velocity="${velocity_revolute}"
+    color="Red"
     mesh_rotor_unit="${mesh_file_rotor_unit}">
     <origin xyz="0 -${arm_length} 0" rpy="0 0 4.71238898038" />
     <xacro:insert_block name="rotor_unit_inertia" />
@@ -158,13 +164,14 @@
   <xacro:rotor_unit
     robot_namespace="${namespace}"
     suffix="front_right"
-    parent="${namespace}/base_link"
+    parent="mockingbird/base_link"
     mass_rotor_unit="${mass_rotor_unit}"
     motor_number="5"
     lower_limit="${lower_limit_revolute}"
     upper_limit="${upper_limit_revolute}"
     effort="${effort_revolute}"
     velocity="${velocity_revolute}"
+    color="Red"
     mesh_rotor_unit="${mesh_file_rotor_unit}">
     <origin xyz="${cos30*arm_length} -${sin30*arm_length} 0" rpy="0 0 5.75958653158" />
     <xacro:insert_block name="rotor_unit_inertia" />
@@ -178,7 +185,7 @@
     direction="ccw"
     motor_constant="${motor_constant}"
     moment_constant="${moment_constant}"
-    parent="${namespace}/rotor_unit_0"
+    parent="mockingbird/rotor_unit_0"
     mass_rotor="${mass_rotor}"
     radius_rotor="${radius_rotor}"
     time_constant_up="${time_constant_up}"
@@ -200,7 +207,7 @@
     direction="cw"
     motor_constant="${motor_constant}"
     moment_constant="${moment_constant}"
-    parent="${namespace}/rotor_unit_1"
+    parent="mockingbird/rotor_unit_1"
     mass_rotor="${mass_rotor}"
     radius_rotor="${radius_rotor}"
     time_constant_up="${time_constant_up}"
@@ -221,7 +228,7 @@
     direction="ccw"
     motor_constant="${motor_constant}"
     moment_constant="${moment_constant}"
-    parent="${namespace}/rotor_unit_2"
+    parent="mockingbird/rotor_unit_2"
     mass_rotor="${mass_rotor}"
     radius_rotor="${radius_rotor}"
     time_constant_up="${time_constant_up}"
@@ -242,7 +249,7 @@
     direction="cw"
     motor_constant="${motor_constant}"
     moment_constant="${moment_constant}"
-    parent="${namespace}/rotor_unit_3"
+    parent="mockingbird/rotor_unit_3"
     mass_rotor="${mass_rotor}"
     radius_rotor="${radius_rotor}"
     time_constant_up="${time_constant_up}"
@@ -264,7 +271,7 @@
     direction="ccw"
     motor_constant="${motor_constant}"
     moment_constant="${moment_constant}"
-    parent="${namespace}/rotor_unit_4"
+    parent="mockingbird/rotor_unit_4"
     mass_rotor="${mass_rotor}"
     radius_rotor="${radius_rotor}"
     time_constant_up="${time_constant_up}"
@@ -286,7 +293,7 @@
     direction="cw"
     motor_constant="${motor_constant}"
     moment_constant="${moment_constant}"
-    parent="${namespace}/rotor_unit_5"
+    parent="mockingbird/rotor_unit_5"
     mass_rotor="${mass_rotor}"
     radius_rotor="${radius_rotor}"
     time_constant_up="${time_constant_up}"
