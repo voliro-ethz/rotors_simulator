@@ -23,13 +23,15 @@
   <!-- Instantiate the mav with a generic odometry sensor. -->
   <xacro:include filename="$(find rotors_description)/urdf/mav_generic_odometry_sensor.gazebo" />
 <xacro:property name="namespace" value="$(arg mav_name)" />
+
+<xacro:include filename="$(find rotors_gazebo)/models/realsense_camera/model.sdf" />
   <!-- Mount a VI-sensor in front of the Firefly. -->
-  <xacro:vi_sensor_macro
-    namespace="${namespace}/vi_sensor"
+  <!-- <xacro:realsense_macro
+    namespace="${namespace}/realsense"
     parent_link="${namespace}/base_link"
     enable_cameras="true"
     enable_depth="true"
     enable_ground_truth="true">
     <origin xyz="0.1 0.0 -0.03" rpy="0.0 0.1 0.0" />
-  </xacro:vi_sensor_macro>
+  </xacro:realsense_macro> -->
 </robot>
