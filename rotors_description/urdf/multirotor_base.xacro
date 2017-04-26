@@ -143,4 +143,49 @@
       <material>Gazebo/${color}</material>
     </gazebo>
   </xacro:macro>
+
+  <!-- Tilting rotorunit link and joint -->
+  <xacro:macro name="rotor_unit"
+    params="robot_namespace suffix mass_rotor_unit parent motor_number lower_limit upper_limit effort velocity mesh_rotor_unit color *origin *inertia">
+    <joint name="rotor_unit_${motor_number}_revolutejoint" type="revolute">
+      <xacro:insert_block name="origin" />
+      <axis xyz="1 0 0" />
+       <limit lower="${lower_limit}" upper="${upper_limit}" effort="${effort}" velocity="${velocity}" />
+      <!-- TODO(ff): not currently set because it's not yet supported -->
+      <!-- <limit effort="2000" velocity="${max_rot_velocity}" /> -->
+      <parent link="${parent}" />
+      <child link="${namespace}/rotor_unit_${motor_number}" />
+    </joint>
+    <link name="${namespace}/rotor_unit_${motor_number}">
+      <inertial>
+        <mass value="${mass_rotor_unit}" /> <!-- [kg] -->
+        <xacro:insert_block name="inertia" />
+      </inertial>
+      <visual>
+        <geometry>
+          <!-- <cylinder length="0.005" radius="${radius_rotor}"/> --> <!-- [m] -->
+            <mesh filename="${mesh_rotor_unit}"
+              scale="1 1 1" />
+        </geometry>
+      </visual>
+      <collision>
+        <geometry>
+          <box size="0.005 0.005 0.005"  /> <!-- [m] -->
+        </geometry>
+      </collision>
+    </link>
+    <transmission name="rotor_unit_${motor_number}_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+        <joint name="rotor_unit_${motor_number}_revolutejoint">
+          <hardwareInterface>EffortJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="rotor_unit_${motor_number}_tiltmotor">
+          <hardwareInterface>EffortJointInterface</hardwareInterface>
+          <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+    <gazebo reference="${robot_namespace}/rotor_unit_${motor_number}">
+      <material>Gazebo/${color}</material>
+    </gazebo>
+  </xacro:macro>
 </robot>
